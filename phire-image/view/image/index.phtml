@@ -1,91 +1,108 @@
 <?php include $phireHeader; ?>
-    <h1 class="image-header"><?=$title; ?></h1>
-    <div id="image-size-header">
-        <div id="image-size"><span id="image-width"></span> x <span id="image-height"></span><span id="scaled"> [ <span id="image-scaled-width"></span> x <span id="image-scaled-height"></span> Scaled ]</span></div>
-        <h4 id="image-name"></h4>
-    </div>
-    <div id="image-editor">
-        <div draggable="true" id="crop"></div>
-        <div draggable="true" id="resize"></div>
-    </div>
-    <form id="image-process-form" action="process/image.php" method="post">
-        <nav id="image-nav">
-            <a href="#" onclick="$.imageEditorChangeNav(1, 'actions'); return false;">Resize</a>
-            <a href="#" onclick="$.imageEditorChangeNav(2, 'adjustments'); return false;">Adjustments</a>
-            <a href="#" onclick="$.imageEditorChangeNav(3, 'filters'); return false;">Filters</a>
-            <a href="#" onclick="$.imageEditorChangeNav(4, 'rotate'); return false;">Rotate</a>
-            <a href="#" onclick="$.imageEditorChangeNav(5, 'layers'); return false;">Overlay</a>
-        </nav>
-        <div id="image-actions">
-            <div id="actions" class="action-div">
-                <select name="resize_action" id="resize_action">
-                    <option value="----">[ Resize Action ]</option>
-                    <option value="resizeToWidth">Resize to Width</option>
-                    <option value="resizeToHeight">Resize to Height</option>
-                    <option value="resize">Resize</option>
-                    <option value="scale">Scale</option>
-                    <option value="crop">Crop</option>
-                    <option value="cropToThumb">Crop to Thumb</option>
-                </select>
-                <div id="resize-value-field" class="value-field">
-                    <input type="text" name="resize_value" id="resize_value" value="" size="10" placeholder="Dimension" />
+        <div id="load-image">
+            <strong>Load Image:</strong>
+            <select name="load_image_select" id="load_image_select" onchange="phire.imageEditor.selectImage(this, '<?=BASE_PATH . APP_URI . '/media/browser/' ;?>');">
+                <option value="----">----</option>
+<?php foreach ($libraries as $libId => $library): ?>
+                <option value="<?=$libId; ?>"><?=$library; ?></option>
+<?php endforeach;?>
+            </select>
+        </div>
+        <h1 class="image-header"><?=$title; ?></h1>
+        <div id="image-editor" style="height: <?=$editor_height; ?>px;">
+            <div draggable="true" id="crop"></div>
+            <div draggable="true" id="resize"></div>
+        </div>
+        <div id="image-size-header">
+            <div id="image-size"><span id="image-width"></span> x <span id="image-height"></span><span id="scaled"> [ <span id="image-scaled-width"></span> x <span id="image-scaled-height"></span> Scaled ]</span></div>
+            <h4 id="image-name"></h4>
+        </div>
+        <form id="image-process-form" action="<?=BASE_PATH . APP_URI; ?>/image" method="post">
+            <nav id="image-nav">
+                <a href="#" onclick="phire.imageEditor.changeNav(1, 'actions'); return false;">Resize</a>
+                <a href="#" onclick="phire.imageEditor.changeNav(2, 'adjustments'); return false;">Adjustments</a>
+                <a href="#" onclick="phire.imageEditor.changeNav(3, 'filters'); return false;">Filters</a>
+                <a href="#" onclick="phire.imageEditor.changeNav(4, 'rotate'); return false;">Rotate</a>
+                <a href="#" onclick="phire.imageEditor.changeNav(5, 'layers'); return false;">Overlay</a>
+            </nav>
+            <div id="image-actions">
+                <div id="actions" class="action-div">
+                    <select name="resize_action" id="resize_action">
+                        <option value="----">[ Resize Action ]</option>
+                        <option value="resizeToWidth">Resize to Width</option>
+                        <option value="resizeToHeight">Resize to Height</option>
+                        <option value="resize">Resize</option>
+                        <option value="scale">Scale</option>
+                        <option value="crop">Crop</option>
+                        <option value="cropToThumb">Crop to Thumb</option>
+                    </select>
+                    <div id="resize-value-field" class="value-field">
+                        <input type="text" name="resize_value" id="resize_value" value="" size="10" placeholder="Dimension" />
+                    </div>
+                    <div id="resize-to-width-value-field" class="value-field">
+                        <input type="text" name="resize_to_width_value" id="resize_to_width_value" value="" size="10" placeholder="Width " />
+                    </div>
+                    <div id="resize-to-height-value-field" class="value-field">
+                        <input type="text" name="resize_to_height_value" id="resize_to_height_value" value="" size="10" placeholder="Height" />
+                    </div>
+                    <div id="scale-value-field" class="value-field">
+                        <input type="text" name="scale_value" id="scale_value" value="" size="10" placeholder="Scale" />
+                    </div>
+                    <div id="crop-value-field" class="value-field">
+                        <input type="text" name="crop_w_value" id="crop_w_value" value="" size="10" placeholder="W" /> <input type="text" name="crop_h_value" id="crop_h_value" value="" size="10" placeholder="H" /> <input type="text" name="crop_resize_value" id="crop_resize_value" value="" size="10" placeholder="Resize" /> <input type="checkbox" name="crop_to_scale" id="crop_to_scale" value="1" /> to Scale?
+                    </div>
+                    <div id="crop-to-thumb-value-field" class="value-field">
+                        <input type="text" name="crop_thumb_value" id="crop_thumb_value" value="" size="10" placeholder="W" /> <input type="text" name="crop_thumb_resize_value" id="crop_thumb_resize_value" value="" size="10" placeholder="Resize" /> <input type="checkbox" name="crop_thumb_to_scale" id="crop_thumb_to_scale" value="1" /> to Scale?
+                    </div>
                 </div>
-                <div id="resize-to-width-value-field" class="value-field">
-                    <input type="text" name="resize_to_width_value" id="resize_to_width_value" value="" size="10" placeholder="Width " />
+                <div id="adjustments" class="action-div">
+                    <input type="text" name="brightness_value" id="brightness_value" value="" size="10" placeholder="Brightness" />
+                    <input type="text" name="contrast_value" id="contrast_value" value="" size="10" placeholder="Contrast" />
+                    <br /><br />
+                    <input type="checkbox" name="desaturate[]" id="desaturate" value="1" /> Desaturate?
                 </div>
-                <div id="resize-to-height-value-field" class="value-field">
-                    <input type="text" name="resize_to_height_value" id="resize_to_height_value" value="" size="10" placeholder="Height" />
+                <div id="filters" class="action-div">
+                    <input type="text" name="sharpen_value" id="sharpen_value" value="" size="10" placeholder="Sharpen" />
+                    <br /><br />
+                    <input type="text" name="blur_value" id="blur_value" value="" size="10" placeholder="Blur" />
+                    <br /><br />
+                    <input type="text" name="pixelate_value" id="pixelate_value" value="" size="10" placeholder="Pixelate" />
+                    <br /><br />
+                    <input type="text" name="border_value" id="border_value" value="" size="10" placeholder="Border" />
+                    <input type="text" name="border_color" id="border_color" value="" size="10" placeholder="Border Color" />
+                    <br /><br />
+                    <input type="checkbox" name="negate[]" id="negate" value="1" /> Negate?
                 </div>
-                <div id="scale-value-field" class="value-field">
-                    <input type="text" name="scale_value" id="scale_value" value="" size="10" placeholder="Scale" />
+                <div id="rotate" class="action-div">
+                    <input type="text" name="rotate_value" id="rotate_value" value="" size="10" placeholder="Degrees" />
+                    <input type="text" name="rotate_bg_color" id="rotate_bg_color" value="" size="10" placeholder="BG Color" /><br /><br />
+                    <input type="radio" name="image_flip_flop" id="image_flip_flop" value="flip" /> Flip? / <input type="radio" name="image_flip_flop" id="image_flip_flop" value="flop" /> Flop?
                 </div>
-                <div id="crop-value-field" class="value-field">
-                    <input type="text" name="crop_w_value" id="crop_w_value" value="" size="10" placeholder="W" /> <input type="text" name="crop_h_value" id="crop_h_value" value="" size="10" placeholder="H" /> <input type="text" name="crop_resize_value" id="crop_resize_value" value="" size="10" placeholder="Resize" /> <input type="checkbox" name="crop_to_scale" id="crop_to_scale" value="1" /> to Scale?
+                <div id="layers" class="action-div">
+                    <input type="text" name="overlay_value" id="overlay_value" value="" size="40" placeholder="Overlay Image" />
+                    <input type="text" name="overlay_x_value" id="overlay_x_value" value="" size="5" placeholder="X" />
+                    <input type="text" name="overlay_y_value" id="overlay_y_value" value="" size="5" placeholder="Y" />
                 </div>
-                <div id="crop-to-thumb-value-field" class="value-field">
-                    <input type="text" name="crop_thumb_value" id="crop_thumb_value" value="" size="10" placeholder="W" /> <input type="text" name="crop_thumb_resize_value" id="crop_thumb_resize_value" value="" size="10" placeholder="Resize" /> <input type="checkbox" name="crop_thumb_to_scale" id="crop_thumb_to_scale" value="1" /> to Scale?
-                </div>
-            </div>
-            <div id="adjustments" class="action-div">
-                <input type="text" name="brightness_value" id="brightness_value" value="" size="10" placeholder="Brightness" />
-                <input type="text" name="contrast_value" id="contrast_value" value="" size="10" placeholder="Contrast" />
-                <br /><br />
-                <input type="checkbox" name="desaturate[]" id="desaturate" value="1" /> Desaturate?
-            </div>
-            <div id="filters" class="action-div">
-                <input type="text" name="sharpen_value" id="sharpen_value" value="" size="10" placeholder="Sharpen" />
-                <br /><br />
-                <input type="text" name="blur_value" id="blur_value" value="" size="10" placeholder="Blur" />
-                <br /><br />
-                <input type="text" name="pixelate_value" id="pixelate_value" value="" size="10" placeholder="Pixelate" />
-                <br /><br />
-                <input type="text" name="border_value" id="border_value" value="" size="10" placeholder="Border" />
-                <input type="text" name="border_color" id="border_color" value="" size="10" placeholder="Border Color" />
-                <br /><br />
-                <input type="checkbox" name="negate[]" id="negate" value="1" /> Negate?
-            </div>
-            <div id="rotate" class="action-div">
-                <input type="text" name="rotate_value" id="rotate_value" value="" size="10" placeholder="Degrees" />
-                <input type="text" name="rotate_bg_color" id="rotate_bg_color" value="" size="10" placeholder="BG Color" /><br /><br />
-                <input type="radio" name="image_flip_flop" id="image_flip_flop" value="flip" /> Flip? / <input type="radio" name="image_flip_flop" id="image_flip_flop" value="flop" /> Flop?
-            </div>
-            <div id="layers" class="action-div">
-                <input type="text" name="overlay_value" id="overlay_value" value="" size="40" placeholder="Overlay Image" />
-                <input type="text" name="overlay_x_value" id="overlay_x_value" value="" size="5" placeholder="X" />
-                <input type="text" name="overlay_y_value" id="overlay_y_value" value="" size="5" placeholder="Y" />
-            </div>
 
-        </div>
-        <div id="image-info">
-            <input type="submit" name="submit" class="apply-btn" value="Apply" />
-            <input type="text" name="save_as" id="save_as" value="" placeholder="Save As..." />
-            Quality: <input type="number" name="quality" id="quality" value="80" min="1" max="100" />
-            <input type="hidden" name="current_image" id="current_image" value="" />
-            <input type="hidden" name="crop_x_value" id="crop_x_value" value="0" />
-            <input type="hidden" name="crop_y_value" id="crop_y_value" value="0" />
-            <input type="hidden" name="scaled_w" id="scaled_w" value="0" />
-            <input type="hidden" name="scaled_h" id="scaled_h" value="0" />
-        </div>
-    </form>
-    </div>
+            </div>
+            <div id="image-info">
+                <input type="submit" name="submit" class="apply-btn" value="Apply" />
+                <input type="text" name="save_as" id="save_as" value="" placeholder="Save As..." />
+                <h4>Quality:</h4>
+                <input type="number" name="quality" id="quality" value="90" min="1" max="100" />
+                <input type="hidden" name="current_image" id="current_image" value="" />
+                <input type="hidden" name="crop_x_value" id="crop_x_value" value="0" />
+                <input type="hidden" name="crop_y_value" id="crop_y_value" value="0" />
+                <input type="hidden" name="scaled_w" id="scaled_w" value="0" />
+                <input type="hidden" name="scaled_h" id="scaled_h" value="0" />
+                <input type="hidden" name="lid" id="lid" value="0" />
+            </div>
+        </form>
+<?php if (isset($image_file) && isset($library_folder)): ?>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                phire.imageEditor.load('<?=BASE_PATH . CONTENT_PATH . '/' . $library_folder . '/' . $image_file; ?>', <?=$library_id; ?>);
+            });
+        </script>
+<?php endif; ?>
 <?php include $phireFooter; ?>

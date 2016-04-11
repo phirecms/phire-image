@@ -2,7 +2,7 @@
 
 return [
     APP_URI => [
-        '/image[/]' => [
+        '/image[/:id]' => [
             'controller' => 'Phire\Image\Controller\IndexController',
             'action'     => 'index',
             'acl'        => [

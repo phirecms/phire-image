@@ -11,9 +11,11 @@ phire.imageEditor = {
     gutterX   : 0,
     gutterY   : 0,
 
-    init: function (image) {
-        $('#image-name').val($(image).data('url'));
-        $('#current_image').val($(image).data('url'));
+    load: function (image, lid) {
+        phire.imageEditor.image = image;
+        $('#image-name').val(image);
+        $('#current_image').val(image);
+        $('#lid').val(lid);
 
         var img = new Image();
         img.onload = function () {
@@ -65,7 +67,7 @@ phire.imageEditor = {
         img.src = phire.imageEditor.image;
 
         $('#crop').drag({
-            startDrag: function () {
+            startDrag : function() {
                 if (phire.imageEditor.cropOrg.top == '') {
                     phire.imageEditor.cropOrg.top = $('#crop').css('top');
                     phire.imageEditor.cropOrg.left = $('#crop').css('left');
@@ -73,7 +75,7 @@ phire.imageEditor = {
                     phire.imageEditor.resizeOrg.left = $('#resize').css('left');
                 }
             },
-            onDrag: function () {
+            onDrag : function() {
                 var x = $('#crop').css('left');
                 var y = $('#crop').css('top');
                 if ((!$('#crop_to_scale')[0].checked) && (!$('#crop_thumb_to_scale')[0].checked)) {
@@ -92,7 +94,7 @@ phire.imageEditor = {
             }
         });
         $('#resize').drag({
-            onDrag: function () {
+            onDrag : function() {
                 var width = ($('#resize').css('left') - $('#crop').css('left') + 2);
                 var height = ($('#resize_action').val() != 'cropToThumb') ? ($('#resize').css('top') - $('#crop').css('top') + 2) : width;
                 if (width > 10) {
@@ -115,13 +117,13 @@ phire.imageEditor = {
                     $('#crop_thumb_value').val(width);
                 }
             },
-            stopDrag: function () {
+            stopDrag : function () {
                 $('#resize').css('top', ($('#crop').css('top') + $('#crop').css('height') - 2) + 'px');
                 $('#resize').css('left', ($('#crop').css('left') + $('#crop').css('width') - 2) + 'px');
             }
         });
 
-        $('#resize_action').change(function () {
+        $('#resize_action').change(function() {
             var action = $('#resize_action').val();
             $('#resize-value-field').hide();
             $('#resize-to-width-value-field').hide();
@@ -174,7 +176,12 @@ phire.imageEditor = {
         $('#actions').show();
         $('#image-nav > a:first-child').attrib('class', 'nav-on');
     },
-    changeNav: function (i, tab) {
+    selectImage : function(sel, url) {
+        if ($(sel).val() != '----') {
+            $.browser.open(url + $(sel).val() + '?editor=phire-image&type=image', 'phireImage', {width: 960, height: 720});
+        }
+    },
+    changeNav : function (i, tab) {
         $('#image-nav > a').attrib('class', 'nav-off');
         $('#image-nav > a:nth-child(' + i + ')').attrib('class', 'nav-on');
 

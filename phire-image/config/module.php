@@ -19,6 +19,7 @@ return [
                 'permission' => 'index'
             ]
         ],
-        'adapter' => 'gd'
+        'editor_height' => 600,
+        'adapter'       => 'gd'
     ]
 ];
