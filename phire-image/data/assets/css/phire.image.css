@@ -1,0 +1,158 @@
+/**
+ * Image Editor Module Style Sheet for Phire CMS 2
+ */
+
+#image-size-header {
+    margin: 0 auto;
+    padding: 20px 20px 0 20px;
+    height: 20px;
+}
+
+#image-size {
+    float: right;
+    display: none;
+}
+
+#image-editor {
+    position: relative;
+    margin: 25px auto 40px auto;
+    padding: 0;
+    width: calc(100% - 60px);
+    height: 500px;
+    border: solid 10px #fff;
+    box-shadow: 0 0 10px 6px #ccc;
+    background-color: #dedede;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#crop {
+    position: absolute;
+    z-index: 100;
+    top: calc(50% - 50px);
+    left: calc(50% - 50px);
+    margin: 0;
+    padding: 0;
+    width: 100px;
+    height: 100px;
+    border: solid 1px #fff;
+    background-color: rgba(255, 255, 255, 0.3);
+    display: none;
+}
+
+#resize {
+    position: absolute;
+    z-index: 101;
+    top: calc(50% + 48px);
+    left: calc(50% + 48px);
+    margin: 0;
+    padding: 0;
+    width: 6px;
+    height: 6px;
+    background-color: #fff;
+    display: none;
+}
+
+#resize:hover {
+    cursor: nwse-resize;
+}
+
+#image-actions {
+    margin: 0 30px 30px 10px;
+    padding: 0 30px 30px 10px;
+    float: left;
+    width: 700px;
+    min-height: 300px;
+    border-right: solid 1px #ccc;
+}
+
+#image-info {
+    margin: 0;
+    padding: 20px 0 10px 0;
+    width: 200px;
+    font-size: 0.9em;
+    float: left;
+}
+
+#image-info > div {
+    margin: 0 0 20px 0;
+    padding: 0;
+}
+
+#image-nav {
+    margin: 0 auto;
+    padding: 0;
+    width: 98%;
+    border-bottom: solid 1px #ccc;
+}
+
+#image-nav > a {
+    margin: 0;
+    padding: 7px 15px 7px 15px;
+    font-size: 0.9em;
+    display: inline-block;
+}
+
+#image-nav > a:hover {
+    color: #fff;
+    background-color: #4aa1ce;
+}
+
+#image-process-form {
+    margin: 0 auto;
+    padding: 0;
+}
+
+#save_as {
+    margin: 0 0 20px 0;
+    width: 190px;
+}
+
+/* Class Definitions */
+
+.value-field {
+    margin: 0;
+    padding: 0;
+    display: none;
+}
+
+.small-link {
+    font-size: 0.9em;
+}
+
+.action-div {
+    margin: 20px 0 20px 0;
+    padding: 20px 0 20px 0;
+    font-size: 0.9em;
+    display: none;
+}
+
+.float-right {
+    float: right;
+}
+
+.apply-btn {
+    margin: 0 0 20px 0;
+    padding: 8px 12px 8px 12px;
+    display: block;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+    font-weight: normal;
+    font-size: 1.0em;
+    width: 100%;
+    background-color: #4aa1ce;
+    border-radius: 4px;
+    border: none;
+    font-family: "Source Sans Pro", Arial, sans-serif;
+}
+
+.nav-off {
+    color: #4aa1ce;
+    background: transparent;
+}
+
+.nav-on {
+    color: #fff;
+    background-color: #4aa1ce;
+}
