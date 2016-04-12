@@ -86,15 +86,20 @@
 
             </div>
             <div id="image-info">
-                <input type="submit" name="submit" class="apply-btn" value="Apply" />
+                <input type="submit" name="submit" class="save-btn wide" value="Apply" /><br /><br />
                 <input type="text" name="save_as" id="save_as" value="" placeholder="Save As..." />
                 <h4>Quality:</h4>
-                <input type="number" name="quality" id="quality" value="90" min="1" max="100" />
+                <input type="number" name="quality" id="quality" value="90" min="1" max="100" /><br /></br >
+                <div id="image-history">
+                    <h4>History</h4>
+                    <input type="hidden" name="history_origin_name" id="history_origin_name" value="" />
+                </div>
                 <input type="hidden" name="current_image" id="current_image" value="" />
                 <input type="hidden" name="crop_x_value" id="crop_x_value" value="0" />
                 <input type="hidden" name="crop_y_value" id="crop_y_value" value="0" />
                 <input type="hidden" name="scaled_w" id="scaled_w" value="0" />
                 <input type="hidden" name="scaled_h" id="scaled_h" value="0" />
+                <input type="hidden" name="org_name" id="org_name" value="" />
                 <input type="hidden" name="lid" id="lid" value="0" />
             </div>
         </form>

@@ -3,12 +3,43 @@
 namespace Phire\Image\Model;
 
 use Phire\Model\AbstractModel;
+use Pop\File\Dir;
+use Pop\File\Upload;
 
 class Image extends AbstractModel
 {
 
-    public function process(array $post, $adapter)
+    public function process(array $post, $adapter, $history)
     {
+
+        if (($post['lid'] == 'history') && !empty($post['history_origin_name'])) {
+            $basename = basename($post['history_origin_name']);
+            $orgMedia = \Phire\Media\Table\Media::findBy(['file' => $basename]);
+            if (isset($orgMedia->id)) {
+                $library = new \Phire\Media\Model\MediaLibrary();
+                $library->getById($orgMedia->library_id);
+                $post['save_as']  = $basename;
+                $post['org_name'] = $basename;
+            }
+        } else {
+            $library = new \Phire\Media\Model\MediaLibrary();
+            $library->getById($post['lid']);
+        }
+
+        if (isset($library) && isset($library->id) && ($post['save_as'] == $post['org_name']) && ($history > 0)) {
+            $historyFolder   = $_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history';
+            $historyFileName = (new Upload($historyFolder))->checkFilename($post['org_name']);
+
+            $historyList = $this->getHistory($post['org_name']);
+            if ((count($historyList) > $history) && file_exists($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history/' . $historyList[0])) {
+                unlink($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history/' . $historyList[0]);
+            }
+            copy(
+                $_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/' . $library->folder . '/' . $post['org_name'],
+                $_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history/' . $historyFileName
+            );
+        }
+
         if (strtolower($adapter) == 'gmagick') {
             $image = new \Pop\Image\Gmagick($_SERVER['DOCUMENT_ROOT'] . $post['current_image']);
         } else if (strtolower($adapter) == 'imagick') {
@@ -16,7 +47,6 @@ class Image extends AbstractModel
         } else {
             $image = new \Pop\Image\Gd($_SERVER['DOCUMENT_ROOT'] . $post['current_image']);
         }
-
 
         if (!empty($post['rotate_value'])) {
             $color = [255, 255, 255];
@@ -35,6 +65,14 @@ class Image extends AbstractModel
                 }
             }
             $image->rotate((int)$post['rotate_value'], $color);
+        }
+
+        if (!empty($post['image_flip_flop'])) {
+            if ($post['image_flip_flop'] == 'flip') {
+                $image->flip();
+            } else {
+                $image->flop();
+            }
         }
 
         if (!empty($post['resize_action'])) {
@@ -56,12 +94,15 @@ class Image extends AbstractModel
                         $image->resizeToWidth((int)$post['scaled_w']);
                     }
                     $image->crop((int)$post['crop_w_value'], (int)$post['crop_h_value'], (int)$post['crop_x_value'], (int)$post['crop_y_value']);
+                    if (!empty($post['crop_resize_value'])) {
+                        $image->resize((int)$post['crop_resize_value']);
+                    }
                     break;
                 case 'cropToThumb':
                     if (isset($post['crop_thumb_to_scale'])) {
                         $image->resizeToWidth((int)$post['scaled_w']);
                     }
-                    $image->cropThumb((int)$post['crop_thumb_value'], (int)$post['crop_x_value'], (int)$post['crop_y_value']);
+                    $image->crop((int)$post['crop_thumb_value'], (int)$post['crop_thumb_value'], (int)$post['crop_x_value'], (int)$post['crop_y_value']);
                     if (!empty($post['crop_thumb_resize_value'])) {
                         $image->resize((int)$post['crop_thumb_resize_value']);
                     }
@@ -124,9 +165,6 @@ class Image extends AbstractModel
             $image->layer->overlay($_SERVER['DOCUMENT_ROOT'] . $post['overlay_value'], (int)$post['overlay_x_value'], (int)$post['overlay_y_value']);
         }
 
-        $library = new \Phire\Media\Model\MediaLibrary();
-        $library->getById($post['lid']);
-
         if (isset($library->id)) {
             $fileName = (!empty($post['save_as'])) ? $post['save_as'] : $image->getBasename();
             $media    = \Phire\Media\Table\Media::findBy(['file' => $fileName]);
@@ -161,6 +199,29 @@ class Image extends AbstractModel
 
             $this->data['image_id'] = $media->id;
         }
+    }
+
+    public function getHistory($filename)
+    {
+        $history = [];
+
+        $dir = new Dir($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history');
+
+        foreach ($dir->getFiles() as $file) {
+            if ($file == $filename) {
+                $history[] = $file;
+            } else if (strpos($file, '_') !== false) {
+                $basename = str_replace(['-', '_'], ['\-', '\_'], substr($filename, 0, strrpos($filename, '.')));
+                $ext      = substr($filename, (strrpos($filename, '.') + 1));
+                $regex    = '/(' . $basename . ')\_+(\d.*)\.' . $ext . '/';
+                if (preg_match($regex, $file)) {
+                    $history[] = $file;
+                }
+            }
+        }
+
+        sort($history, SORT_NATURAL);
+        return $history;
     }
 
 }

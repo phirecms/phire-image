@@ -40,7 +40,11 @@ class IndexController extends AbstractController
 
         if ($this->request->isPost()) {
             $image = new Model\Image();
-            $image->process($this->request->getPost(), $this->application->module('phire-image')['adapter']);
+            $image->process(
+                $this->request->getPost(),
+                $this->application->module('phire-image')['adapter'],
+                $this->application->module('phire-image')['history']
+            );
             $this->sess->setRequestValue('saved', true);
             $this->redirect(BASE_PATH . APP_URI . '/image/' . $image->image_id);
         } else {
@@ -48,6 +52,25 @@ class IndexController extends AbstractController
         }
 
         $this->send();
+    }
+
+    /**
+     * JSON action method
+     *
+     * @return void
+     */
+    public function json()
+    {
+        $json = [
+            'history' => []
+        ];
+
+        if (null !== $this->request->getQuery('image')) {
+            $json['history'] = (new Model\Image())->getHistory($this->request->getQuery('image'));
+        }
+
+        $this->response->setBody(json_encode($json, JSON_PRETTY_PRINT));
+        $this->send(200, ['Content-Type' => 'application/json']);
     }
 
     /**

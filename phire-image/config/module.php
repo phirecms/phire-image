@@ -20,6 +20,22 @@ return [
             ]
         ],
         'editor_height' => 600,
-        'adapter'       => 'gd'
+        'adapter'       => 'gd',
+        'history'       => 10,
+        'install' => function() {
+            mkdir($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history');
+            chmod($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history', 0777);
+            copy(
+                $_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/index.html',
+                $_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history/index.html'
+            );
+            chmod($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history/index.html', 0777);
+        },
+        'uninstall' => function() {
+            if (file_exists($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history')) {
+                $dir = new \Pop\File\Dir($_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/image-history');
+                $dir->emptyDir(true);
+            }
+        }
     ]
 ];
