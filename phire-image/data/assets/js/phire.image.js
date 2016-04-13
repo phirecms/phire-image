@@ -203,6 +203,30 @@ phire.imageEditor = {
 
         jax('#actions').show();
         jax('#image-nav > a:first-child').attrib('class', 'nav-on');
+
+        jax('#crop_thumb_color').click(function(){
+            if (jax('#crop_thumb_color')[0].checked) {
+                jax('#crop').css('border', 'solid 1px #000');
+                jax('#crop').css('background-color', 'rgba(0, 0, 0, 0.3)');
+                jax('#resize').css('background-color', '#000');
+            } else {
+                jax('#crop').css('border', 'solid 1px #fff');
+                jax('#crop').css('background-color', 'rgba(255, 255, 255, 0.3)');
+                jax('#resize').css('background-color', '#fff');
+            }
+        })
+
+        jax('#crop_color').click(function(){
+            if (jax('#crop_color')[0].checked) {
+                jax('#crop').css('border', 'solid 1px #000');
+                jax('#crop').css('background-color', 'rgba(0, 0, 0, 0.3)');
+                jax('#resize').css('background-color', '#000');
+            } else {
+                jax('#crop').css('border', 'solid 1px #fff');
+                jax('#crop').css('background-color', 'rgba(255, 255, 255, 0.3)');
+                jax('#resize').css('background-color', '#fff');
+            }
+        })
     },
     selectImage : function(sel, url) {
         if (jax(sel).val() != '----') {

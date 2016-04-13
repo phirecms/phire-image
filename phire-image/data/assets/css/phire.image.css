@@ -150,6 +150,11 @@
     display: block;
 }
 
+#crop_to_scale, #crop_color, #crop_thumb_to_scale, #crop_thumb_color {
+    position: relative;
+    top: 4px;
+}
+
 /* Class Definitions */
 
 .value-field {
