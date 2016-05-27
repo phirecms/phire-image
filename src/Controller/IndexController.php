@@ -1,10 +1,31 @@
 <?php
+/**
+ * Phire Image Module
+ *
+ * @link       https://github.com/phirecms/phire-image
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ */
 
+/**
+ * @namespace
+ */
 namespace Phire\Image\Controller;
 
 use Phire\Image\Model;
 use Phire\Controller\AbstractController;
 
+/**
+ * Image Index Controller class
+ *
+ * @category   Phire\Image
+ * @package    Phire\Image
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ * @version    1.0.0
+ */
 class IndexController extends AbstractController
 {
 

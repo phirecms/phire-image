@@ -1,11 +1,32 @@
 <?php
+/**
+ * Phire Image Module
+ *
+ * @link       https://github.com/phirecms/phire-image
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ */
 
+/**
+ * @namespace
+ */
 namespace Phire\Image\Model;
 
 use Phire\Model\AbstractModel;
 use Pop\File\Dir;
 use Pop\File\Upload;
 
+/**
+ * Image Model class
+ *
+ * @category   Phire\Image
+ * @package    Phire\Image
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ * @version    1.0.0
+ */
 class Image extends AbstractModel
 {
 

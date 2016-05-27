@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * phire-image routes
+ */
 return [
     APP_URI => [
         '/image[/:id]' => [
