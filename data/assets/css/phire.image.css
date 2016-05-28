@@ -191,3 +191,17 @@ a.nav-on {
     text-decoration: none;
     background-color: #aaa;
 }
+
+.image-header {
+    margin: 10px 0 10px 0;
+    padding: 10px 0 10px 0;
+}
+
+.image-header:before {
+    font-family: "FontAwesome";
+    font-weight: normal;
+    content: "\f247";
+    margin: 0;
+    padding: 0 8px 0 0;
+    color: #b4b5b4;
+}
